@@ -1,22 +1,14 @@
-node {
-    stage('git checkout') {
-    git 'https://github.com/AnupamaSoma/maven-project.git'
-}
-   stage('Build') {
-    sh 'mvn package'
-}
-   stage('Deployment')
-   {
-       deploy adapters: [tomcat9(credentialsId: 'tomcat-credentials', path: '', url: 'http://172.31.82.183:8080')], contextPath: 'qaapp', war: '**\\*.war'
-   }
-   stage('testing')
+pipeline
+{
+    agent any
+    stages
     {
-        git 'https://github.com/AnupamaSoma/FunctionalTesting.git'
-        sh 'java -jar /var/lib/jenkins/workspace/scripted_pipeline/testing.jar'
+        stage ('clean')
+        {
+            steps
+            {                bat 'C:/Build/apache-maven-3.9.8/bin/mvn clean'
+            }
+        }
     }
-    stage('Delivery')
-    {
-        deploy adapters: [tomcat9(credentialsId: 'tomcat-credentials', path: '', url: 'http://172.31.83.134:8080')], contextPath: 'prodapp', war: '**\\*.war'
-    }
-    
 }
+                
